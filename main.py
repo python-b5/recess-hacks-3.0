@@ -165,7 +165,7 @@ def goals():
                     start = datetime.datetime.strptime(goal['duration']['start'], "%Y-%m-%d")
                     end = datetime.datetime.strptime(goal['duration']['end'], "%Y-%m-%d")
 
-                    if current_date > end:
+                    if data["logs"]:
                         complete = True
                         total_days = (end - start).days
 
@@ -184,15 +184,18 @@ def goals():
 
                             if count < goal["frequency"]["amount"]:
                                 complete = False
-                                break
+                                break                              
+                    else:
+                        complete = False
 
+                    if current_date > end or complete:
                         if complete:
                             progress = text["progress-complete"]
                         else:
                             progress = text["progress-failed"]
                     else:
                         progress = Text(
-                            f"Days remaining: {(datetime.datetime.strptime(goal['duration']['end'], '%Y-%m-%d') - current_date).days + 2}",
+                            f"Days remaining: {(datetime.datetime.strptime(goal['duration']['end'], '%Y-%m-%d') - current_date).days + 1}",
                             fonts["body"], colors["black"]
                         )
                 elif goal["type"] == "custom":
@@ -274,7 +277,7 @@ def add_goal():
                 elif amount_number_focused:
                     if event.key == pygame.K_BACKSPACE and amount_number_contents:
                         amount_number_contents = amount_number_contents[:-1]
-                    elif len(amount_number_contents) < 5 and (event.unicode in "123456789" or (amount_number_contents and event.unicode in "0.")):
+                    elif len(amount_number_contents) < 5 and (event.unicode in "0123456789" or (not amount_number_contents and event.unicode == ".")):
                         amount_number_contents += event.unicode
                 elif amount_unit_focused:
                     if event.key == pygame.K_BACKSPACE and amount_unit_contents:
@@ -442,7 +445,7 @@ def add_goal():
                 },
                 "duration": {
                     "start": date.strftime("%Y-%m-%d"),
-                    "end": (date + datetime.timedelta(days=int(duration_contents) - 1)).strftime("%Y-%m-%d")
+                    "end": (date + datetime.timedelta(days=int(duration_contents))).strftime("%Y-%m-%d")
                 }
             })
 
@@ -680,7 +683,7 @@ def add_log():
                     if amount["number"]["focused"]:
                         if event.key == pygame.K_BACKSPACE and amount["number"]["contents"]:
                             amount["number"]["contents"] = amount["number"]["contents"][:-1]
-                        elif len(amount["number"]["contents"]) < 5 and (event.unicode in "123456789" or (amount["number"]["contents"] and event.unicode in "0.")):
+                        elif len(amount["number"]["contents"]) < 5 and (event.unicode in "0123456789" or (amount["number"]["contents"] and event.unicode == ".")):
                             amount["number"]["contents"] += event.unicode
                     elif amount["unit"]["focused"]:
                         if event.key == pygame.K_BACKSPACE and amount["unit"]["contents"]:
@@ -812,7 +815,7 @@ if __name__ == "__main__":
         "back": Text("<", fonts["label"], colors["white"]),
         "x": Text("X", fonts["body-bold"], colors["black"]),
         "progress-complete": Text("Complete!", fonts["body"], colors["black"]),
-        "progress-failed": Text("Failed...", fonts["body"], colors["black"]),
+        "progress-failed": Text("Incomplete...", fonts["body"], colors["black"]),
         "progress-custom": Text("(custom goal; no progress)", fonts["body"], colors["black"]),
         "no-goals": Text("(no goals)", fonts["body"], colors["black"]),
         "add-goal-button": Text("ADD GOAL", fonts["label-small"], colors["white"]),
@@ -871,15 +874,14 @@ if __name__ == "__main__":
     try:
         with open("data.json") as file:
             data = json.load(file)
-            if "goals" not in data or "logs" not in data:
-                raise json.JSONDecodeError
+            if "logs" not in data or "goals" not in data:
+                raise ValueError
     except FileNotFoundError:
-        data = {}
-    except json.JSONDecodeError:
+        data = {"logs": {}, "goals": []}
+    except ValueError:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    save()
                     pygame.quit()
                     sys.exit()
 
