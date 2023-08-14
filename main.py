@@ -806,7 +806,6 @@ if __name__ == "__main__":
     }
 
     text = {
-        "title": Text("BeWell", fonts["title"], colors["white"]),
         "invalid": Text("Error: Invalid data.json!", fonts["label"], colors["white"]),
         "goals": Text("GOALS", fonts["label"], colors["white"]),
         "logs": Text("LOGS", fonts["label"], colors["white"]),
