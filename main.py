@@ -709,13 +709,13 @@ def add_log():
         if clicked and pos[0] < 15 + text["back"].width and pos[1] < 50:
             next_menu = "logs"
 
-        screen.blit(text["activity"].surface, (320 - text["activity"].width // 2, 304))
-        screen.blit(text["amounts"].surface, (640 - text["amounts"].width // 2, 184))
+        screen.blit(text["activity"].surface, (320 - text["activity"].width // 2, 359))
+        screen.blit(text["amounts"].surface, (640 - text["amounts"].width // 2, 209))
 
         activity_text = Text(activity_contents, fonts["body"], colors["black"])
-        box = (310 - activity_text.width // 2, 364, activity_text.width + 20, activity_text.height + 20)
+        box = (310 - activity_text.width // 2, 419, activity_text.width + 20, activity_text.height + 20)
         pygame.draw.rect(screen, colors["gray"], pygame.Rect(*box))
-        screen.blit(activity_text.surface, (320 - activity_text.width // 2, 374))
+        screen.blit(activity_text.surface, (320 - activity_text.width // 2, 429))
 
         if clicked:
             if box[0] <= pos[0] <= box[0] + box[2] and box[1] <= pos[1] <= box[1] + box[3]:
@@ -723,17 +723,14 @@ def add_log():
             else:
                 activity_focused = False
 
-        if activity_contents and activity_contents not in data["logs"]:
-            screen.blit(text["activity-warning"].surface, (320 - text["activity-warning"].width // 2, 425))
-
         for i, amount in enumerate(amounts):
             amount_number_text = Text(amount["number"]["contents"], fonts["body"], colors["black"])
             amount_unit_text = Text(amount["unit"]["contents"], fonts["body"], colors["black"])
             amount_width = amount_number_text.width + 50 + amount_unit_text.width
             
-            box = (640 - amount_width // 2, 244 + 80 * i, amount_number_text.width + 20, amount_number_text.height + 20)
+            box = (640 - amount_width // 2, 269 + 80 * i, amount_number_text.width + 20, amount_number_text.height + 20)
             pygame.draw.rect(screen, colors["gray"], pygame.Rect(*box))
-            screen.blit(amount_number_text.surface, (650 - amount_width // 2, 254 + 80 * i))
+            screen.blit(amount_number_text.surface, (650 - amount_width // 2, 279 + 80 * i))
 
             if clicked:
                 if box[0] <= pos[0] <= box[0] + box[2] and box[1] <= pos[1] <= box[1] + box[3]:
@@ -741,9 +738,9 @@ def add_log():
                 else:
                     amount["number"]["focused"] = False
 
-            box = (670 - amount_width // 2 + amount_number_text.width, 244 + 80 * i, amount_unit_text.width + 20, amount_unit_text.height + 20)
+            box = (670 - amount_width // 2 + amount_number_text.width, 269 + 80 * i, amount_unit_text.width + 20, amount_unit_text.height + 20)
             pygame.draw.rect(screen, colors["gray"], pygame.Rect(*box))
-            screen.blit(amount_unit_text.surface, (680 - amount_width // 2 + amount_number_text.width, 254 + 80 * i))
+            screen.blit(amount_unit_text.surface, (680 - amount_width // 2 + amount_number_text.width, 279 + 80 * i))
 
             if clicked:
                 if box[0] <= pos[0] <= box[0] + box[2] and box[1] <= pos[1] <= box[1] + box[3]:
@@ -751,12 +748,12 @@ def add_log():
                 else:
                     amount["unit"]["focused"] = False
 
-        screen.blit(text["unit-format"].surface, (640 - text["unit-format"].width // 2, 558))
+        screen.blit(text["unit-format"].surface, (640 - text["unit-format"].width // 2, 583))
 
         active = activity_contents and any(amount["number"]["contents"] and amount["unit"]["contents"] for amount in amounts)
-        box = (930 - text["add-log-button"].width // 2, 335, text["add-log-button"].width + 60, 100)
+        box = (930 - text["add-log-button"].width // 2, 360, text["add-log-button"].width + 60, 100)
         aa_round_rect(screen, pygame.Rect(*box), colors["blue"] if active else colors["gray"], rad=15)
-        screen.blit(text["add-log-button"].surface, (960 - text["add-log-button"].width // 2, 385 - text["add-log-button"].height // 2))
+        screen.blit(text["add-log-button"].surface, (960 - text["add-log-button"].width // 2, 410 - text["add-log-button"].height // 2))
 
         if clicked and active and box[0] <= pos[0] <= box[0] + box[2] and box[1] <= pos[1] <= box[1] + box[3]:
             if activity_contents not in data["logs"]:
