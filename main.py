@@ -284,17 +284,17 @@ def add_goal():
                 elif frequency_amount_focused:
                     if event.key == pygame.K_BACKSPACE and frequency_amount_contents:
                         frequency_amount_contents = frequency_amount_contents[:-1]
-                    elif len(frequency_amount_contents) < 3 and (event.unicode in "123456789" or (frequency_amount_contents and event.unicode == "0")):
+                    elif len(frequency_amount_contents) < 3 and event.unicode in "123456789":
                         frequency_amount_contents += event.unicode
                 elif frequency_every_focused:
                     if event.key == pygame.K_BACKSPACE and frequency_every_contents:
                         frequency_every_contents = frequency_every_contents[:-1]
-                    elif len(frequency_every_contents) < 3 and (event.unicode in "123456789" or (frequency_every_contents and event.unicode == "0")):
+                    elif len(frequency_every_contents) < 3 and event.unicode in "123456789":
                         frequency_every_contents += event.unicode
                 elif duration_focused:
                     if event.key == pygame.K_BACKSPACE and duration_contents:
                         duration_contents = duration_contents[:-1]
-                    elif len(duration_contents) < 3 and (event.unicode in "123456789" or (duration_contents and event.unicode == "0")):
+                    elif len(duration_contents) < 3 and event.unicode in "123456789":
                         duration_contents += event.unicode
                 elif custom_focused:
                     if event.key == pygame.K_BACKSPACE and custom_contents:
